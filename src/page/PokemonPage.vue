@@ -5,7 +5,11 @@
         <!-- TODO: Componente Picture -->
         <PokemonPicture :pokemonId="pokemon.id" :showPokemon="showPokemon"/>
         <!-- TODO: Componente Opciones -->
-        <PokemonOption :pokemons="pokemonArr"/>
+        <PokemonOption :pokemons="pokemonArr" @selection="checkAnswer($event)"/>
+    </div>
+    <div v-if="showAnswer">
+        <h2>{{ message }}</h2>
+        <button @click="newGame">Nuevo Juego</button>
     </div>
 </template>
 <script>
@@ -22,7 +26,9 @@ export default {
         return {
             pokemonArr: [],
             pokemon: null,
-            showPokemon: false
+            showPokemon: false,
+            message: null,
+            showAnswer:false
         }
     },
     methods: {
@@ -33,6 +39,24 @@ export default {
             this.pokemon = this.pokemonArr[rndInt]
             console.log(this.pokemonArr)
             console.log(rndInt)
+        },
+        checkAnswer(pokemonId) {
+            this.showAnswer= true
+            this.showPokemon = true;
+            console.log('Pokemon Page llamado', pokemonId)
+            if (pokemonId === this.pokemon.id) {
+                this.message = `Correcto, ${ this.pokemon.name}`
+            } else {
+                this.message = `Oops, era ${ this.pokemon.name}`
+                
+            }
+        },
+        newGame() {
+            this.showPokemon = false
+            this.showAnswer = false
+            this.pokemonArr = []
+            this.pokemon = null
+            this.mixPokemonArray()
     }
     },
     mounted() {
